@@ -1,0 +1,4 @@
+Idea Keep (like Google Keep)
+
+Django project
+
