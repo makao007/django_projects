@@ -7,6 +7,8 @@
 
             body {background-color:#F0F0F0;}
 
+            textarea {text-align:left;}
+
             #header {background-color:#F5F5F5; border-bottom:1px solid #E5E5E5;}
 
             #header a {text-decoration:none; font-size: 26px; padding: 20px; vertical-align: middle; line-height: 65px; color:#DD4B39;}
@@ -52,8 +54,10 @@
                 webkit-border-radius: 2px;
                 -moz-border-radius: 2px;
                 border-radius: 2px;
+                float:right;
             }
 
+            .complete_button:hover {border:1px solid black}
 
             .item_block {background:white;
                 webkit-border-radius: 2px;
@@ -61,11 +65,14 @@
                 border-radius: 2px;
                 margin-top:30px;
                 padding: 10px 20px;
+                overflow: hidden;
             }
 
-            .item_title_input {width:90%; border:none; font-size:16px; outline:none;}
-            .item_desc_input {width:90%; border:none; font-size:15px; outline:none; height:auto;
+            .item_title_input {width:100%; border:none; font-size:16px; outline:none;}
+            .item_desc_input {width:100%; border:none; font-size:15px; outline:none; height:auto;
                 margin-top:10px; resize:none; line-height:22px;}
+
+            .item_last_update {color: #D3A3A3; font-size: 14px;}
 
         </style>
     </head>
@@ -73,23 +80,67 @@
 
         <div id="header">
             <a href="#">Idea Keep</a>
-            <form action="" method="post">
+            <form action="" method="post" >
+
                 <input type="text" name="keyword" id="keyword">&nbsp;&nbsp;&nbsp;
                 <input type="submit" class="search_button" value="Search">
             </form>
         </div>
         <div id="main">
             <div id="item_list">
-                <div class="item_block">
-                    <form action="/add" method="post">
-                        <input type="text" placeholder="标题" class="item_title_input">
-                        <textarea rows="2" class="item_desc_input" placeholder="记事" onkeyup="if (window.event.keyCode==13 ||window.event.keyCode==8) this.rows = this.value.split('\n').length+1"></textarea>
-                        <input type="submit" value="完成" class="complete_button">
-                    </form>
-                </div>
+
+                     <div class="item_block">
+                        <form action="/add_item" method="post">
+                            {% csrf_token %}
+                            <input type="text" placeholder="标题" class="item_title_input" name="title">
+                            <textarea rows="2" class="item_desc_input" placeholder="记事" name="desc"
+                                      onkeyup="if (window.event.keyCode==13 ||window.event.keyCode==8) this.rows = this.value.split('\n').length+1"></textarea>
+                            <span class="item_last_update">{{item.last_update}}</span><input type="submit" value="完成" class="complete_button">
+                        </form>
+                    </div>
+
+
+                {% for item in data %}
+
+                    <div class="item_block">
+                        <form action="/add_item" method="post" onsubmit="return add_item(this);">
+                            {% csrf_token %}
+                            <input type="hidden" name="xid" value="{{item.id}}">
+                            <input type="text" placeholder="标题" class="item_title_input" name="title" value="{{item.title}}">
+                            <textarea rows="{{item.lines}}" class="item_desc_input" placeholder="记事" name="desc"
+                                      onkeyup="if (window.event.keyCode==13 ||window.event.keyCode==8) this.rows = this.value.split('\n').length+1">{{item.content}}</textarea>
+                            <span class="item_last_update">{{item.last_update}}</span><input type="submit" value="完成" class="complete_button">
+                        </form>
+                    </div>
+
+                {% endfor %}
             </div>
         </div>
         <div id="footer"></div>
 
     </body>
 </html>
+
+
+
+<script src="/static/js/jquery.js"> </script>
+<script>
+    function add_item (form) {
+        console.log ('try to add a item through ajax');
+        $.ajax ({
+            url: '/add_item',
+            type: 'POST',
+            data: {
+                title: 'aa',
+                desc: 'adsf',
+            },
+            success: function (data){
+                alert ("success");
+            },
+
+
+        });
+
+        return false;
+    }
+</script>

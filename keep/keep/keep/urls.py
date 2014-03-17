@@ -11,4 +11,5 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
 
     url(r'^$', 'idea.views.home'),
+    url(r'^add_item$', 'idea.views.add_item'),
 )

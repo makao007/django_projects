@@ -10,3 +10,11 @@ class Item(models.Model):
     def __unicode__ (self):
         return self.title
 
+
+    def lines (self):
+        return self.content.count('\n') + 2
+
+
+    class Meta:
+        ordering = ["-last_update"]
+

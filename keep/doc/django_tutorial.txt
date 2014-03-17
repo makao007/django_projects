@@ -25,7 +25,8 @@ django example : create a job system
        class Location(models.Model):
             city = models.CharField(max_length=50)
             state = models.CharField(max_length=50, null=True, blank=True)
-            country = models.IntergerField()
+            country = models.IntergerField(default =0)
+            xx = models.ForeignKey (City)
 
 
   register the model inside admin.py
@@ -49,13 +50,37 @@ django example : create a job system
    def home (request):
     return render (request, 'keep.html',{'title':'Idea Keep'})
 
-   settings.py , add template path
+   settings.py , add other template path, default is "templates" inside each apps folder
    -----
    TEMPLATE_DIRS = (
         'idea/template',
    )
 
 
+
+
+=========
+template:
+forloop.counter0
+forloop.counter
+
+forloop.revcounter0
+forloop.revcounter
+
+{% if forloop.first %}
+{% if not forloop.last %}
+
+{# This is a comment #}
+
+{% include "nav.html"
+
+{% block content %}{% endblock %}
+
+{% extends "base.html" %}
+
+TEMPLATE_DIRS = (
+    '/home/django/mysite/templates',
+)
 
 
 
